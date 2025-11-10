@@ -1,0 +1,135 @@
+{
+  "name": "finanza-workspace",
+  "folders": [
+    {
+      "name": "🚀 Finanza Root",
+      "path": "."
+    },
+    {
+      "name": "☕ Backend (Spring Boot)",
+      "path": "backend"
+    },
+    {
+      "name": "⚛️ Frontend (React)",
+      "path": "frontend"
+    }
+  ],
+  "settings": {
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.compile.nullAnalysis.mode": "automatic",
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/target": true,
+      "**/.git": true
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/target": true,
+      "**/dist": true,
+      "**/build": true
+    },
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[java]": {
+      "editor.defaultFormatter": "redhat.java"
+    },
+    "eslint.workingDirectories": [
+      "frontend"
+    ]
+  },
+  "extensions": {
+    "recommendations": [
+      "vscjava.vscode-java-pack",
+      "vmware.vscode-boot-dev-pack",
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "dsznajder.es7-react-js-snippets",
+      "ms-azuretools.vscode-docker",
+      "cweijan.vscode-postgresql-client2"
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "java",
+        "name": "🚀 Spring Boot App",
+        "request": "launch",
+        "mainClass": "com.finanza.FinanzaApplication",
+        "projectName": "finanza-backend",
+        "cwd": "${workspaceFolder}/backend"
+      },
+      {
+        "type": "chrome",
+        "name": "🌐 Launch Frontend",
+        "request": "launch",
+        "url": "http://localhost:3000",
+        "webRoot": "${workspaceFolder}/frontend/src"
+      }
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "▶️ Start Backend",
+        "type": "shell",
+        "command": "mvn spring-boot:run",
+        "options": {
+          "cwd": "${workspaceFolder}/backend"
+        },
+        "group": "build",
+        "presentation": {
+          "reveal": "always",
+          "panel": "new"
+        }
+      },
+      {
+        "label": "▶️ Start Frontend",
+        "type": "shell",
+        "command": "npm run dev",
+        "options": {
+          "cwd": "${workspaceFolder}/frontend"
+        },
+        "group": "build",
+        "presentation": {
+          "reveal": "always",
+          "panel": "new"
+        }
+      },
+      {
+        "label": "🐳 Start Docker Compose",
+        "type": "shell",
+        "command": "docker-compose up -d",
+        "group": "build",
+        "presentation": {
+          "reveal": "always"
+        }
+      },
+      {
+        "label": "⏹️ Stop Docker Compose",
+        "type": "shell",
+        "command": "docker-compose down",
+        "group": "build"
+      },
+      {
+        "label": "🔨 Build Backend",
+        "type": "shell",
+        "command": "mvn clean package",
+        "options": {
+          "cwd": "${workspaceFolder}/backend"
+        },
+        "group": "build"
+      },
+      {
+        "label": "🔨 Build Frontend",
+        "type": "shell",
+        "command": "npm run build",
+        "options": {
+          "cwd": "${workspaceFolder}/frontend"
+        },
+        "group": "build"
+      }
+    ]
+  }
+}

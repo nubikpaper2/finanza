@@ -1,0 +1,61 @@
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: finanza-db
+    environment:
+      POSTGRES_DB: finanza_db
+      POSTGRES_USER: finanza_user
+      POSTGRES_PASSWORD: finanza_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - finanza-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U finanza_user -d finanza_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Spring Boot Application
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: finanza-backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/finanza_db
+      SPRING_DATASOURCE_USERNAME: finanza_user
+      SPRING_DATASOURCE_PASSWORD: finanza_pass
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - finanza-network
+    restart: unless-stopped
+
+  # Frontend (React)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: finanza-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - finanza-network
+    restart: unless-stopped
+
+networks:
+  finanza-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
