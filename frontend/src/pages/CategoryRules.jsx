@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
+import Navbar from '../components/Navbar';
 
 export default function CategoryRules() {
   const [rules, setRules] = useState([]);
   const [categories, setCategories] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingRule, setEditingRule] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -24,7 +25,6 @@ export default function CategoryRules() {
   }, []);
 
   const loadRules = async () => {
-    setLoading(true);
     try {
       const response = await api.get('/category-rules');
       setRules(response.data);
@@ -128,16 +128,18 @@ export default function CategoryRules() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Reglas de Categorización</h1>
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
-        >
-          {showForm ? 'Cancelar' : '+ Nueva Regla'}
-        </button>
-      </div>
+    <div className="min-h-screen bg-gray-50">
+      <Navbar />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold text-gray-900">Reglas de Categorización</h1>
+          <button
+            onClick={() => setShowForm(!showForm)}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-sm transition-colors"
+          >
+            {showForm ? 'Cancelar' : '+ Nueva Regla'}
+          </button>
+        </div>
 
       {/* Información */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
@@ -373,6 +375,7 @@ export default function CategoryRules() {
           </table>
         </div>
       )}
+      </div>
     </div>
   );
 }

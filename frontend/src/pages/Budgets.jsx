@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
+import Navbar from '../components/Navbar';
 
 export default function Budgets() {
   const [budgets, setBudgets] = useState([]);
   const [categories, setCategories] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(() => {
     const now = new Date();
     return { year: now.getFullYear(), month: now.getMonth() + 1 };
@@ -112,16 +113,18 @@ export default function Budgets() {
                       'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Presupuestos</h1>
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
-        >
-          {showForm ? 'Cancelar' : '+ Nuevo Presupuesto'}
-        </button>
-      </div>
+    <div className="min-h-screen bg-gray-50">
+      <Navbar />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold text-gray-900">Presupuestos</h1>
+          <button
+            onClick={() => setShowForm(!showForm)}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-sm transition-colors"
+          >
+            {showForm ? 'Cancelar' : '+ Nuevo Presupuesto'}
+          </button>
+        </div>
 
       {/* Selector de mes */}
       <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
@@ -267,6 +270,7 @@ export default function Budgets() {
           ))}
         </div>
       )}
+      </div>
     </div>
   );
 }

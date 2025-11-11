@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
+import Navbar from '../components/Navbar';
 import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
@@ -8,7 +9,7 @@ import {
 export default function Reports() {
   const [report, setReport] = useState(null);
   const [yearlyData, setYearlyData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(() => {
     const now = new Date();
     return { year: now.getFullYear(), month: now.getMonth() + 1 };
@@ -82,36 +83,45 @@ export default function Reports() {
   }));
 
   if (loading) {
-    return <div className="text-center py-8">Cargando reportes...</div>;
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center py-8">Cargando reportes...</div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Reportes y Análisis</h1>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setViewType('monthly')}
-            className={`px-4 py-2 rounded-lg ${
-              viewType === 'monthly' 
-                ? 'bg-blue-600 text-white' 
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
-          >
-            Mensual
-          </button>
-          <button
-            onClick={() => setViewType('yearly')}
-            className={`px-4 py-2 rounded-lg ${
-              viewType === 'yearly' 
-                ? 'bg-blue-600 text-white' 
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
-          >
-            Anual
-          </button>
+    <div className="min-h-screen bg-gray-50">
+      <Navbar />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold text-gray-900">Reportes y Análisis</h1>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setViewType('monthly')}
+              className={`px-4 py-2 rounded-lg shadow-sm transition-colors ${
+                viewType === 'monthly' 
+                  ? 'bg-blue-600 text-white' 
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+            >
+              Mensual
+            </button>
+            <button
+              onClick={() => setViewType('yearly')}
+              className={`px-4 py-2 rounded-lg shadow-sm transition-colors ${
+                viewType === 'yearly' 
+                  ? 'bg-blue-600 text-white' 
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+            >
+              Anual
+            </button>
+          </div>
         </div>
-      </div>
 
       {/* Selector de periodo */}
       <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
@@ -336,6 +346,7 @@ export default function Reports() {
           </div>
         </>
       )}
+      </div>
     </div>
   );
 }

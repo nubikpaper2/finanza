@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
+import Navbar from '../components/Navbar';
 import Papa from 'papaparse';
 
 export default function Import() {
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState('');
   const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [result, setResult] = useState(null);
   const [importType, setImportType] = useState('csv'); // 'csv' o 'excel'
 
@@ -23,6 +24,8 @@ export default function Import() {
       }
     } catch (error) {
       console.error('Error cargando cuentas:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -46,7 +49,7 @@ export default function Import() {
       return;
     }
 
-    setLoading(true);
+    const importLoading = true;
     setResult(null);
 
     try {
@@ -67,8 +70,6 @@ export default function Import() {
       document.getElementById('file-input').value = '';
     } catch (error) {
       alert('Error importando archivo: ' + (error.response?.data?.message || error.message));
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -93,9 +94,22 @@ export default function Import() {
     document.body.removeChild(link);
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center py-8">Cargando...</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-gray-900 mb-6">Importar Transacciones</h1>
+    <div className="min-h-screen bg-gray-50">
+      <Navbar />
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-6">Importar Transacciones</h1>
 
       {/* Instrucciones */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
@@ -254,6 +268,7 @@ export default function Import() {
           )}
         </div>
       )}
+      </div>
     </div>
   );
 }
