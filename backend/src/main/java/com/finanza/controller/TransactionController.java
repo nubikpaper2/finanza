@@ -44,7 +44,9 @@ public class TransactionController {
         Organization organization = new Organization();
         organization.setId(1L);
         
-        Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
+        String direction = sortDirection != null ? sortDirection : "DESC";
+        Sort.Direction sortDir = Sort.Direction.fromString(direction);
+        Sort sort = Sort.by(sortDir, sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
         
         Page<TransactionResponse> transactions;

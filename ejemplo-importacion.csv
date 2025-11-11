@@ -1,0 +1,21 @@
+fecha,descripcion,monto,tipo,categoria,notas
+2024-11-01,Pago de salario,3500.00,INCOME,Salario,Pago mensual
+2024-11-02,Compra en Walmart supermercado,245.80,EXPENSE,Alimentación,Compra semanal
+2024-11-03,Pago de renta,950.00,EXPENSE,Vivienda,Renta noviembre
+2024-11-04,Pago de luz,85.50,EXPENSE,Servicios,CFE
+2024-11-05,Gasolina,600.00,EXPENSE,Transporte,Tanque lleno
+2024-11-06,Consulta médica,450.00,EXPENSE,Salud,Doctor general
+2024-11-07,Cena en restaurante,320.00,EXPENSE,Entretenimiento,Cumpleaños
+2024-11-08,Compra en Amazon,189.99,EXPENSE,Varios,Electrónica
+2024-11-09,Pago internet,399.00,EXPENSE,Servicios,Telmex
+2024-11-10,Venta de artículo usado,500.00,INCOME,Otros Ingresos,Laptop vieja
+2024-11-11,Compra en supermercado Soriana,178.50,EXPENSE,Alimentación,Verduras y frutas
+2024-11-12,Pago de agua,120.00,EXPENSE,Servicios,SAPAC
+2024-11-13,Gimnasio,350.00,EXPENSE,Salud,Mensualidad
+2024-11-14,Taxi,85.00,EXPENSE,Transporte,Uber
+2024-11-15,Compra en farmacia,125.00,EXPENSE,Salud,Medicamentos
+2024-11-16,Cine,180.00,EXPENSE,Entretenimiento,Película
+2024-11-17,Compra en supermercado Chedraui,298.75,EXPENSE,Alimentación,Despensa mensual
+2024-11-18,Pago de teléfono,250.00,EXPENSE,Servicios,Telcel
+2024-11-19,Comisión freelance,1200.00,INCOME,Freelance,Proyecto web
+2024-11-20,Ropa,450.00,EXPENSE,Vestuario,Camisa y pantalón

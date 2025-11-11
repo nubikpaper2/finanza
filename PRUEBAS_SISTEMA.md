@@ -14,7 +14,7 @@ npm run dev
 ```
 
 2. **Acceder a la aplicación**:
-- URL: http://localhost:5173
+- URL: http://localhost:3000
 - Usuario: admin@demo.com
 - Password: admin123
 

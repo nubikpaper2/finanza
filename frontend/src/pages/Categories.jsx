@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { categoryService } from '../services/api';
+import Navbar from '../components/Navbar';
 
 export default function Categories() {
   const [categories, setCategories] = useState([]);
@@ -111,14 +112,19 @@ export default function Categories() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="text-xl text-gray-600">Cargando...</div>
+      <div className="min-h-screen bg-gray-100">
+        <Navbar />
+        <div className="flex justify-center items-center h-64">
+          <div className="text-xl text-gray-600">Cargando...</div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gray-100">
+      <Navbar />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-6 flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-900">Categorías</h1>
         <button
@@ -334,6 +340,7 @@ export default function Categories() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

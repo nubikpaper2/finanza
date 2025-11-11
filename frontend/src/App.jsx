@@ -6,6 +6,10 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
 import Categories from './pages/Categories';
+import Budgets from './pages/Budgets';
+import Reports from './pages/Reports';
+import Import from './pages/Import';
+import CategoryRules from './pages/CategoryRules';
 
 function PrivateRoute({ children }) {
   const { user } = useAuth();
@@ -45,6 +49,26 @@ function App() {
           <Route path="/categories" element={
             <PrivateRoute>
               <Categories />
+            </PrivateRoute>
+          } />
+          <Route path="/budgets" element={
+            <PrivateRoute>
+              <Budgets />
+            </PrivateRoute>
+          } />
+          <Route path="/reports" element={
+            <PrivateRoute>
+              <Reports />
+            </PrivateRoute>
+          } />
+          <Route path="/import" element={
+            <PrivateRoute>
+              <Import />
+            </PrivateRoute>
+          } />
+          <Route path="/category-rules" element={
+            <PrivateRoute>
+              <CategoryRules />
             </PrivateRoute>
           } />
           <Route path="/" element={<Navigate to="/dashboard" />} />

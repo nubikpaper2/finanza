@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { categoryService, transactionService } from '../services/api';
+import Navbar from '../components/Navbar';
 
 export default function Transactions() {
   const [transactions, setTransactions] = useState([]);
@@ -34,6 +35,9 @@ export default function Transactions() {
     tags: [],
     attachments: []
   });
+
+  // Categorías filtradas por tipo
+  const filteredCategories = categories.filter(cat => cat.type === formData.type);
 
   useEffect(() => {
     loadCategories();
@@ -160,14 +164,19 @@ export default function Transactions() {
 
   if (loading && transactions.length === 0) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="text-xl text-gray-600">Cargando...</div>
+      <div className="min-h-screen bg-gray-100">
+        <Navbar />
+        <div className="flex justify-center items-center h-64">
+          <div className="text-xl text-gray-600">Cargando...</div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gray-100">
+      <Navbar />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-6 flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-900">Transacciones</h1>
         <button
@@ -377,12 +386,12 @@ export default function Transactions() {
                     </label>
                     <select
                       value={formData.type}
-                      onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, type: e.target.value, categoryId: '' })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       required
                     >
-                      <option value="INCOME">Ingreso</option>
-                      <option value="EXPENSE">Gasto</option>
+                      <option value="INCOME">💰 Ingreso</option>
+                      <option value="EXPENSE">💸 Gasto</option>
                     </select>
                   </div>
 
@@ -415,22 +424,33 @@ export default function Transactions() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Categoría
+                      Categoría *
                     </label>
                     <select
                       value={formData.categoryId}
                       onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
                     >
                       <option value="">Seleccione una categoría</option>
-                      {categories
-                        .filter(cat => cat.type === formData.type)
-                        .map((cat) => (
-                          <option key={cat.id} value={cat.id}>
-                            {cat.icon} {cat.name}
-                          </option>
-                        ))}
+                      {filteredCategories.map((cat) => (
+                        <option key={cat.id} value={cat.id}>
+                          {cat.icon} {cat.name}
+                        </option>
+                      ))}
                     </select>
+                    {filteredCategories.length === 0 && (
+                      <p className="mt-1 text-xs text-red-500">
+                        No hay categorías de tipo {formData.type === 'INCOME' ? 'Ingreso' : 'Gasto'}. 
+                        <button
+                          type="button"
+                          onClick={() => window.location.href = '/categories'}
+                          className="ml-1 underline"
+                        >
+                          Crear una
+                        </button>
+                      </p>
+                    )}
                   </div>
 
                   <div className="md:col-span-2">
@@ -483,6 +503,7 @@ export default function Transactions() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

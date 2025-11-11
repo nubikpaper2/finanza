@@ -246,7 +246,7 @@ npm run dev
 ```
 
 4. **Acceder**
-- Frontend: http://localhost:5173
+- Frontend: http://localhost:3000
 - Backend: http://localhost:8080/api
 - Credenciales: admin@demo.com / admin123
 

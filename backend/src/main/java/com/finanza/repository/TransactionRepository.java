@@ -1,6 +1,7 @@
 package com.finanza.repository;
 
 import com.finanza.model.Account;
+import com.finanza.model.Category;
 import com.finanza.model.Organization;
 import com.finanza.model.Transaction;
 import org.springframework.data.domain.Page;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -65,5 +67,23 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
         Account account, 
         LocalDate startDate, 
         LocalDate endDate
+    );
+    
+    List<Transaction> findByOrganizationAndTransactionDateBetween(
+        Organization organization,
+        LocalDate startDate,
+        LocalDate endDate
+    );
+    
+    @Query("SELECT COALESCE(SUM(t.amount), 0) FROM Transaction t " +
+           "WHERE t.category = :category " +
+           "AND t.transactionDate BETWEEN :startDate AND :endDate " +
+           "AND t.organization = :org " +
+           "AND t.type = 'EXPENSE'")
+    BigDecimal sumAmountByCategoryAndDateRange(
+        @Param("category") Category category,
+        @Param("startDate") LocalDate startDate,
+        @Param("endDate") LocalDate endDate,
+        @Param("org") Organization organization
     );
 }
