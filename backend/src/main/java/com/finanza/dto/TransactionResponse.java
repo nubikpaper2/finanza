@@ -17,6 +17,9 @@ public class TransactionResponse {
     private Long id;
     private Transaction.TransactionType type;
     private BigDecimal amount;
+    private String currency;
+    private BigDecimal exchangeRate;
+    private BigDecimal amountInLocalCurrency;
     private LocalDate transactionDate;
     private String description;
     private String notes;
@@ -30,6 +33,13 @@ public class TransactionResponse {
     private Long destinationAccountId;
     private String destinationAccountName;
     
+    private Long creditCardId;
+    private String creditCardName;
+    private Integer installments;
+    
+    private java.util.List<ArgentinaTaxResponse> taxes;
+    private java.util.List<InstallmentResponse> installmentDetails;
+    
     private Set<String> tags;
     private Set<String> attachments;
     
@@ -41,6 +51,9 @@ public class TransactionResponse {
         response.setId(transaction.getId());
         response.setType(transaction.getType());
         response.setAmount(transaction.getAmount());
+        response.setCurrency(transaction.getCurrency());
+        response.setExchangeRate(transaction.getExchangeRate());
+        response.setAmountInLocalCurrency(transaction.getAmountInLocalCurrency());
         response.setTransactionDate(transaction.getTransactionDate());
         response.setDescription(transaction.getDescription());
         response.setNotes(transaction.getNotes());
@@ -59,6 +72,13 @@ public class TransactionResponse {
             response.setDestinationAccountId(transaction.getDestinationAccount().getId());
             response.setDestinationAccountName(transaction.getDestinationAccount().getName());
         }
+        
+        if (transaction.getCreditCard() != null) {
+            response.setCreditCardId(transaction.getCreditCard().getId());
+            response.setCreditCardName(transaction.getCreditCard().getName());
+        }
+        
+        response.setInstallments(transaction.getInstallments());
         
         response.setTags(transaction.getTags());
         response.setAttachments(transaction.getAttachments());

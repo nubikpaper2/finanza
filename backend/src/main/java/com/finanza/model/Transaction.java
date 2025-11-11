@@ -31,6 +31,15 @@ public class Transaction {
     @Column(nullable = false, precision = 15, scale = 2)
     private BigDecimal amount;
 
+    @Column(length = 10)
+    private String currency = "ARS"; // Moneda de la transacción
+
+    @Column(precision = 15, scale = 4)
+    private BigDecimal exchangeRate; // Tipo de cambio aplicado (si es USD)
+
+    @Column(precision = 15, scale = 2)
+    private BigDecimal amountInLocalCurrency; // Monto en moneda local (ARS)
+
     @Column(nullable = false)
     private LocalDate transactionDate;
 
@@ -60,6 +69,14 @@ public class Transaction {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
     private User createdBy;
+
+    // Tarjeta de crédito (si aplica)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "credit_card_id")
+    private CreditCard creditCard;
+
+    @Column(name = "installments")
+    private Integer installments; // Número de cuotas (si es compra en cuotas)
 
     @ElementCollection
     @CollectionTable(name = "transaction_tags", joinColumns = @JoinColumn(name = "transaction_id"))

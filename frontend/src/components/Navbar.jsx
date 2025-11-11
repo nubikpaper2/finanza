@@ -92,6 +92,36 @@ export default function Navbar() {
               >
                 Reglas
               </button>
+              <button
+                onClick={() => navigate('/credit-cards')}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition ${
+                  isActive('/credit-cards')
+                    ? 'bg-blue-100 text-blue-700'
+                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-100'
+                }`}
+              >
+                Tarjetas
+              </button>
+              <button
+                onClick={() => navigate('/installments')}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition ${
+                  isActive('/installments')
+                    ? 'bg-blue-100 text-blue-700'
+                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-100'
+                }`}
+              >
+                Cuotas
+              </button>
+              <button
+                onClick={() => navigate('/exchange-rates')}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition ${
+                  isActive('/exchange-rates')
+                    ? 'bg-blue-100 text-blue-700'
+                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-100'
+                }`}
+              >
+                TC
+              </button>
             </div>
           </div>
           <div className="flex items-center space-x-4">

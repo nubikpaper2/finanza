@@ -7,6 +7,7 @@ import com.finanza.model.*;
 import com.finanza.repository.AccountRepository;
 import com.finanza.repository.CategoryRepository;
 import com.finanza.repository.TransactionRepository;
+import com.finanza.repository.CreditCardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,10 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;
     private final CategoryRepository categoryRepository;
+    private final CreditCardRepository creditCardRepository;
+    private final ExchangeRateService exchangeRateService;
+    private final CreditCardInstallmentService installmentService;
+    private final ArgentinaTaxService taxService;
 
     @Transactional(readOnly = true)
     public Page<TransactionResponse> getAllTransactions(Organization organization, Pageable pageable) {
@@ -85,6 +90,7 @@ public class TransactionService {
         Transaction transaction = new Transaction();
         transaction.setType(request.getType());
         transaction.setAmount(request.getAmount());
+        transaction.setCurrency(request.getCurrency() != null ? request.getCurrency() : "ARS");
         transaction.setTransactionDate(request.getTransactionDate());
         transaction.setDescription(request.getDescription());
         transaction.setNotes(request.getNotes());
@@ -92,6 +98,31 @@ public class TransactionService {
         transaction.setCategory(category);
         transaction.setOrganization(organization);
         transaction.setCreatedBy(user);
+        
+        // Procesar tipo de cambio si es USD
+        if ("USD".equals(transaction.getCurrency())) {
+            BigDecimal rate = request.getExchangeRate();
+            if (rate == null) {
+                // Obtener tipo de cambio del día
+                rate = exchangeRateService.getRateForDate(
+                    request.getTransactionDate(), "OFICIAL", organization);
+            }
+            transaction.setExchangeRate(rate);
+            transaction.setAmountInLocalCurrency(
+                transaction.getAmount().multiply(rate));
+        } else {
+            transaction.setAmountInLocalCurrency(transaction.getAmount());
+        }
+        
+        // Procesar tarjeta de crédito y cuotas
+        if (request.getCreditCardId() != null) {
+            CreditCard creditCard = creditCardRepository
+                .findByIdAndOrganization(request.getCreditCardId(), organization)
+                .orElseThrow(() -> new RuntimeException("Tarjeta de crédito no encontrada"));
+            transaction.setCreditCard(creditCard);
+            transaction.setInstallments(request.getInstallments() != null ? 
+                request.getInstallments() : 1);
+        }
         
         if (request.getTags() != null) {
             transaction.getTags().addAll(request.getTags());
@@ -105,6 +136,26 @@ public class TransactionService {
         updateAccountBalance(account, transaction.getType(), request.getAmount());
 
         Transaction savedTransaction = transactionRepository.save(transaction);
+        
+        // Crear cuotas si es compra en cuotas
+        if (savedTransaction.getCreditCard() != null && 
+            savedTransaction.getInstallments() != null && 
+            savedTransaction.getInstallments() > 1) {
+            installmentService.createInstallments(
+                savedTransaction, 
+                savedTransaction.getCreditCard(), 
+                savedTransaction.getInstallments(), 
+                organization);
+        }
+        
+        // Crear impuestos argentinos si se especificaron
+        if (request.getTaxes() != null && !request.getTaxes().isEmpty()) {
+            taxService.createTaxesForTransaction(
+                savedTransaction, 
+                request.getTaxes(), 
+                organization);
+        }
+        
         log.info("Transacción creada exitosamente con id: {}. Nuevo saldo de cuenta {}: {}", 
                  savedTransaction.getId(), account.getName(), account.getBalance());
         

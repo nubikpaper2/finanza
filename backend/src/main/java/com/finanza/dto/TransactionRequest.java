@@ -24,6 +24,10 @@ public class TransactionRequest {
     @DecimalMin(value = "0.01", message = "El monto debe ser mayor a 0")
     private BigDecimal amount;
     
+    private String currency; // ARS, USD, etc.
+    
+    private BigDecimal exchangeRate; // Si es USD
+    
     @NotNull(message = "La fecha de transacción es requerida")
     private LocalDate transactionDate;
     
@@ -40,6 +44,13 @@ public class TransactionRequest {
     
     // Solo para transferencias
     private Long destinationAccountId;
+    
+    // Tarjeta de crédito y cuotas
+    private Long creditCardId;
+    private Integer installments; // Número de cuotas
+    
+    // Impuestos argentinos
+    private java.util.List<ArgentinaTaxRequest> taxes;
     
     private Set<String> tags;
     
